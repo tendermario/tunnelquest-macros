@@ -1,0 +1,24 @@
+{
+  "name": "eq-purple-links",
+  "version": "1.0.0",
+  "description": "Pulls inventory from eq files and turns it into hotkey macros with purple links.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tendermario/tunnelquest-macros.git"
+  },
+  "keywords": [
+    "everquest",
+    "macros",
+    "electron"
+  ],
+  "author": "Mario Viens",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tendermario/tunnelquest-macros/issues"
+  },
+  "homepage": "https://github.com/tendermario/tunnelquest-macros#readme"
+}

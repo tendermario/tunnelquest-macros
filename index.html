@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EverQuest Purple Links Creator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div>
+    <h1>EverQuest purple links creator</h1>
+    <label for="input-files">Input list:</label>
+    <input type="file" id="input-files" name="input-files" accept=".txt" multiple class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+    <label for="input-list">Input list:</label>
+    <textarea id="input-list" name="input-list" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+    <label for="prices-list">Input prices list:</label>
+    <textarea id="prices-list" name="prices-list" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+    <label for="prefix">Prefix:</label>
+    <input id="prefix" value="/auc WTS " class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></input>
+    <label for="delimiter">Delimiter:</label>
+    <input id="delimiter" value=" | " class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></input>
+    <label for="buttonNumberStart">Button number start (Starts on page 2, button 1-12):</label>
+    <input id="buttonNumberStart" value="5" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></input>
+    <label for="output-list">Output list:</label>
+    <textarea id="output-list" class="w-full py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+  </div>
+  <div>
+    <div>
+      Ignores:        Prices:
+      <ul id="ignores">
+      </ul>
+    </div>
+    <div id="prices"></div>
+  </div>
+  <script src="jquery-3.7.1.min.js"></script>
+  <script>
+
+    // Input: Tomnook-inventory.txt
+    // Slot Name  ID  Quantity
+    // Bag1 Gloves  0234  1
+    // Bag1-slot2 A cool sword  11113 1
+    // ...
+
+    // Output: will be pasted in my macros.txt
+    // Page2Button5Line1=/auc WTS 002fe3000000000000000000000000000000000000000Gloves | 002fe3000000000000000000000000000000000000000A cool sword
+    // Page2Button5Line2=/auc WTS 002fe3000000000000000000000000000000000000000Gloves | 002fe3000000000000000000000000000000000000000A cool sword
+    // Page2Button5Line3=/auc WTS 002fe3000000000000000000000000000000000000000Gloves | 002fe3000000000000000000000000000000000000000A cool sword
+    // ...
+
+    // Goals:
+    // 1. For a given input list, create an output list - x
+    // 2. For an output list, modify it to have only the name and ID - x
+    // 3. For a name and ID, add purple link, ID hex and padding - x
+    // 4. For each purple link, add prefix and delimiter up to 255 characters separation - x
+    // 5. For each purple link list, add button prefix - x
+    // 7. Make sure each line is under 255 characters - x
+    // 8. Add a list of ignored items - x
+    // 9. Save data to local storage to remember previous price values - x
+    // 10. Fix bug: undefined items in list - x
+    // 6. Add a list of prices per items - x
+    // 11. Sort items (by name, or price) - x
+    // 12. Add loading from multiple files into input - x
+    // 13. Add saving the same files selected to storage
+    // 14. Add prices via another input
+    // 15. Make tabbing to next price field possible - rearrange prices
+    // 16. Add some styling, maybe use stone UI?
+    // 17. Bugfix - not all values put into the prices area are numerically alphabetical
+
+    const delimiter = document.getElementById('delimiter');
+    const inputList = document.getElementById('input-list');
+    const pricesList = document.getElementById('prices-list');
+    const outputList = document.getElementById('output-list');
+    const prefix = document.getElementById('prefix');
+    const buttonNumberStart = document.getElementById('buttonNumberStart');
+    const ignores = $('#ignores');
+    const prices = $('#prices');
+    const selectedFiles = document.getElementById("input-files");
+    
+    // Storage actions
+
+    const updateLocalStore = list => {
+      localStorage.setItem('itemList', JSON.stringify(Array.from(list)))
+    }
+
+    const getItemList = () => {
+      return JSON.parse(localStorage.getItem('itemList'))
+    }
+
+    const getItemPrice = id => {
+      return localStorage.getItem(id)
+    }
+
+    const getItemById = id => getItemList().filter(item => item.id == id)[0]
+    
+    const setItemPrice = (id, price) => {
+      const state = getItemList()
+      const newList = 
+      localStorage.setItem(id, price)
+    }
+    
+    const getIgnores = () => {
+      return JSON.parse(localStorage.getItem("ignoreList")) || []
+    }
+
+    const toggleIgnoreId = id => {
+      let ignoreList = getIgnores();
+          if (ignoreList.includes(id)) {
+            ignoreList = ignoreList.filter(i => i != id);
+          } else {
+            ignoreList.push(id);
+          }
+          localStorage.setItem("ignoreList", JSON.stringify(ignoreList))
+    }
+
+    function unique(a) {
+        var seen = {};
+        return a.filter(function(item) {
+          if (!seen[item.id]) {
+            seen[item.id] = true
+            return true
+          }
+          return false
+        });
+    }
+    
+    function createIgnoresAndPricesLists(items) {
+      // Add to both ignores and prices lists
+      ignores.empty();
+      items.forEach(({name, id}) => {
+        const isChecked = getIgnores()?.includes(id) ? "checked" : "";
+        const isDisabled = getIgnores()?.includes(id) ? "disabled" : "";
+        const ignoreCheckbox = $(`<input type="checkbox" id="${name}" ${isChecked} ">`)
+        const label = $(`<label for="${name}">${name}</label>`)
+        const price = $(`<input id="price-${id}" value="${getItemPrice(id) || ""}" ${isDisabled} class="rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-red-600 placeholder:font-black focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="0" ></input>`)
+        const item = $(`<li></li>`);
+        item.append(ignoreCheckbox, label, price);
+        ignores.append(item);
+        
+        price.on('input', event => {
+          setItemPrice(id, event.target.value)
+        });
+        price.on('blur', updateList)
+
+        ignoreCheckbox.on('click', event => {
+          toggleIgnoreId(id)
+          updateList()
+        });
+      });
+    }
+
+    const createFinalLines = items => {
+      const finalLines = []
+      let line;
+      items.forEach(({link, price}, i) => {
+        const linkedItem = price ? `${link} ${price}` : link
+        if (i == 0) {
+          return line = prefix.value + linkedItem;
+        }
+        const lineAddition = delimiter.value + linkedItem
+        if (line.length + lineAddition.length > 255) {
+          finalLines.push(line);
+          line = prefix.value + linkedItem;
+        } else {
+          line += lineAddition;
+        }
+      })
+      // Add the final line to the list, since we are always working on a incomplete line, and adding a line
+      // to the list only when we are working on a linked item that is going onto a new line.
+      finalLines.push(line);
+      return finalLines;
+    }
+
+    // Converts input list from a string to a list of objects
+      // items = [
+      //   {
+      //     name: "identifier",
+      //     id: "1235",
+      //     hex: "a012",
+      //     price: "1k",
+      //   }
+      // ]
+      // ignored = ['1235', ...]
+    const parseInput = inputList => {
+      const items = []
+
+      // Remove garbage lines: header, empty slots, empty lines
+      const inventory = inputList.split("\n").filter(value => !value.includes("Location	") && !value.includes("\tEmpty") && value.trim() !== "");
+      
+      // Remove unnecessary values, keeping just Name and ID
+      inventory.forEach(row => {
+        columns = row.split('\t');
+        const name = columns[1]
+        const id = columns[2]
+        const hex = Number(id).toString(16).padStart(4, 0)
+        const price = getItemPrice(id)
+        // Add special characters around its hex value and name, with some strange padding.
+        // 47 chars long + name = ~50ish chars + delimiter
+        // E.g.: 002fe3000000000000000000000000000000000000000Leatherfoot Raider Skullcap
+        // TODO: Figure out the reason for this padding...
+        const link = "00" + hex + "000000000000000000000000000000000000000" + name + ""
+        items.push({
+          id,
+          name,
+          price,
+          link,
+        });
+      })
+
+      // Dedupe
+      return unique(items);
+    }
+
+    const generateOutput = items => {
+      // Generate amount of items that will fit on each line
+      let finalLines = createFinalLines(items)
+
+      // Failure path:
+      finalLines.forEach(value => {
+        if (value.length > 255) {
+          console.warn("Warning: length of the following line is above 255 chars (" + value.length + "):")
+          console.warn(value)
+        }
+      })
+
+      // Add button lines
+      // Page2Button10Line5=
+      // Bug: Does not go to next page, just increments upwards in buttons, even though button 12 is the highest in the game.
+      let buttonLineNumber = 1;
+      let buttonNumber = buttonNumberStart.value;
+      let pageNumber = 2;
+      finalLines = finalLines.map(value => {
+        if (buttonLineNumber > 5) {
+          buttonLineNumber = 1;
+          buttonNumber++;
+        }
+        if (buttonNumber > 12) {
+          buttonNumber = 1;
+          pageNumber++;
+        }
+        return `Page${pageNumber}Button${buttonNumber}Line${buttonLineNumber++}=${value}`
+      })
+      return finalLines
+    }
+
+    const removeIgnores = items => {
+      const ignoreList = JSON.parse(localStorage.getItem("ignoreList")) || []
+      return items.filter(value => !ignoreList.includes(value.id));
+    }
+
+    const updateList = () => {
+      const inputListText = inputList.value
+      let items = parseInput(inputListText) // creates [{name:x, id:1, hex:x, price:1}]
+      updateLocalStore(items)
+      createIgnoresAndPricesLists(items)
+      items = removeIgnores(items).sort((item, prev) => Number(item.price) > Number(prev.price) ? -1 : 1)
+      
+      const finalLines = generateOutput(items)
+
+      // Separate with newlines and place in DOM
+      outputList.value = finalLines.join("\n");
+    }
+
+    const handleFiles = () => {
+      const fileList = selectedFiles.files
+      if (fileList.length > 0) {
+        for (file of fileList) {
+          const reader = new FileReader();
+          reader.readAsText(file, "UTF-8");
+          reader.onload = function (event) {
+              inputList.innerHTML += event.target.result;
+              updateList()
+          }
+          reader.onerror = function (e) {
+              console.error(e)
+          }
+        }
+      }
+    }
+
+    // saveFiles - This will attempt to save the same file names to local storage
+    // We need this + the user path to load the same files each time on load.
+    const saveFiles = () => {
+      const {files} = selectedFiles
+      console.log(files)
+      const fileNames = []
+      for (const file of files) {
+        fileNames.push(file.name)
+      }
+      localStorage.setItem("inputFiles", JSON.stringify(fileNames))
+    }
+
+    // loadFiles - This will attempt to load the saved files used from last time.
+    const loadFiles = () => {
+      const inputFiles = JSON.parse(localStorage.getItem("inputFiles"))
+      console.log(inputFiles)
+      const a = `/Users/mvien/Desktop/shared/${inputFiles[0]}`
+      $.get(a, data => {
+        alert( `Load was performed. ${data}` );
+      })
+    }
+
+    // Parse the prices into 
+    // [{name: x, price: y}, ...]
+    // First column name, Last column price
+    const parsePrices = () => {}
+
+    const updatePrices = () => {
+      const inputListText = inputList.value
+      let items = parsePrices(inputListText)
+      const map = new Map(JSON.parse(localStorage.itemIdToName))
+      items.forEach(item => {
+        const {name, price} = item
+        if (map.values.includes(item)) {
+          // TODO: Add ability to check whether theres two items of the same name conflicting
+          const id = map[name]
+          localStorage.setItem(id, price)
+        } else {
+          console.log("ID for item not saved in localstorage yet", name)
+        }
+      })
+    }
+
+    inputList.addEventListener('input', updateList);
+    prefix.addEventListener('input', updateList);
+    delimiter.addEventListener('input', updateList);
+    selectedFiles.addEventListener('change', handleFiles);
+    selectedFiles.addEventListener('change', saveFiles);
+    pricesList.addEventListener('input', updatePrices)
+    // Run if the page loads as well
+    loadFiles();
+    handleFiles();
+  </script>
+</body>
+</html>
