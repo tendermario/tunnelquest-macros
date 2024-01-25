@@ -281,8 +281,9 @@
       // Remove unnecessary values, keeping just Name and ID
       inventory.forEach(row => {
         columns = row.split('\t')
-        const name = columns[0]
-        const price = columns[1]
+        // Remove outside whitespace from name/price input
+        const name = columns[0].trim()
+        const price = columns[1].trim()
         items[name] = price
       })
       return items
@@ -293,7 +294,6 @@
       const newPrices = parsePrices(inputListText)
       let oldPrices = getItemList()
 
-      // TODO: The storage is not updating with the new prices... Mario needs to figure this out later. zzz
       for (name in newPrices) {
         const price = newPrices[name]
         oldPrices = oldPrices.map(item => {

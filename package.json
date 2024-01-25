@@ -1,6 +1,6 @@
 {
   "name": "tunnelquest-macros",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Pulls inventory from eq files and turns it into hotkey macros with purple links.",
   "main": "main.js",
   "scripts": {
