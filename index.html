@@ -9,7 +9,7 @@
 <body>
   <div>
     <h1>EverQuest purple links creator</h1>
-    <label for="input-files">Input list:</label>
+    <label for="input-files">Inventory file(s):</label>
     <input type="file" id="input-files" name="input-files" accept=".txt" multiple class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
     <label for="input-list">Input list:</label>
     <textarea id="input-list" name="input-list" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
@@ -54,18 +54,19 @@
       return JSON.parse(localStorage.getItem('itemList'))
     }
 
+    const getItemById = id => getItemList()?.filter(item => item.id == id)[0]
+    
     const getItemPrice = id => {
-      return localStorage.getItem(id)
+      return getItemById(id)?.price
     }
 
-    const getItemById = id => getItemList().filter(item => item.id == id)[0]
-    
     const setItemPrice = (id, price) => {
-      const state = getItemList()
-      const newList = 
-      localStorage.setItem(id, price)
+      const list = getItemList()
+      const itemIndex = list.findIndex(item => item.id == id)
+      list[itemIndex].price = price
+      updateLocalStore(list)
     }
-    
+
     const getIgnores = () => {
       return JSON.parse(localStorage.getItem("ignoreList")) || []
     }
@@ -245,47 +246,65 @@
       }
     }
 
-    // saveFiles - This will attempt to save the same file names to local storage
+    // TODO: saveFiles - This will attempt to save the same file names to local storage
     // We need this + the user path to load the same files each time on load.
     const saveFiles = () => {
-      const {files} = selectedFiles
-      console.log(files)
-      const fileNames = []
-      for (const file of files) {
-        fileNames.push(file.name)
-      }
-      localStorage.setItem("inputFiles", JSON.stringify(fileNames))
+      // const {files} = selectedFiles
+      // console.log(files)
+      // const fileNames = []
+      // for (const file of files) {
+      //   fileNames.push(file.name)
+      // }
+      // localStorage.setItem("inputFiles", JSON.stringify(fileNames))
     }
 
-    // loadFiles - This will attempt to load the saved files used from last time.
+    // TODO: loadFiles - This will attempt to load the saved files used from last time.
     const loadFiles = () => {
-      const inputFiles = JSON.parse(localStorage.getItem("inputFiles"))
-      console.log(inputFiles)
-      const a = `/Users/mvien/Desktop/shared/${inputFiles[0]}`
-      $.get(a, data => {
-        alert( `Load was performed. ${data}` );
-      })
+      // const inputFiles = JSON.parse(localStorage.getItem("inputFiles"))
+      // console.log(inputFiles)
+      // $.get(a, data => {
+      //   alert( `Load was performed. ${data}` )
+      // })
     }
 
-    // Parse the prices into 
-    // [{name: x, price: y}, ...]
-    // First column name, Last column price
-    const parsePrices = () => {}
+    // Parse the prices from:
+    // A Sword  1234
+    // To:
+    // [{"A Sword": "1234"}, ...]
+    //
+    // First column name, Last column price.
+    const parsePrices = list => {
+      const items = {}
+      // Remove garbage lines: empty lines
+        const inventory = list.split("\n").filter(value => value.trim() !== "")
+      
+      // Remove unnecessary values, keeping just Name and ID
+      inventory.forEach(row => {
+        columns = row.split('\t')
+        const name = columns[0]
+        const price = columns[1]
+        items[name] = price
+      })
+      return items
+    }
 
     const updatePrices = () => {
-      const inputListText = inputList.value
-      let items = parsePrices(inputListText)
-      const map = new Map(JSON.parse(localStorage.itemIdToName))
-      items.forEach(item => {
-        const {name, price} = item
-        if (map.values.includes(item)) {
-          // TODO: Add ability to check whether theres two items of the same name conflicting
-          const id = map[name]
-          localStorage.setItem(id, price)
-        } else {
-          console.log("ID for item not saved in localstorage yet", name)
-        }
-      })
+      const inputListText = pricesList.value
+      const newPrices = parsePrices(inputListText)
+      let oldPrices = getItemList()
+
+      // TODO: The storage is not updating with the new prices... Mario needs to figure this out later. zzz
+      for (name in newPrices) {
+        const price = newPrices[name]
+        oldPrices = oldPrices.map(item => {
+          if (item.name == name) {
+            item.price = price
+          }
+          return item
+        })
+      }
+
+      updateLocalStore(oldPrices)
     }
 
     inputList.addEventListener('input', updateList);

@@ -62,9 +62,9 @@ Output text to be pasted in your macros file:
 ### V2
 
 1. Turn this into an electron app (Done)
+1. Add prices via another input field
 1. Bugfix - not all values put into the prices area are numerically alphabetical
 1. Add saving the same files selected to storage
-1. Add prices via another input field
 1. Make tabbing to next price field possible - rearrange prices
 1. Add some styling, maybe use stone UI?
 1. Consider "2k" as "2000", consider "2.1k" as "2100"
