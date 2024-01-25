@@ -34,38 +34,6 @@
   </div>
   <script src="jquery-3.7.1.min.js"></script>
   <script>
-
-    // Input: Tomnook-inventory.txt
-    // Slot Name  ID  Quantity
-    // Bag1 Gloves  0234  1
-    // Bag1-slot2 A cool sword  11113 1
-    // ...
-
-    // Output: will be pasted in my macros.txt
-    // Page2Button5Line1=/auc WTS 002fe3000000000000000000000000000000000000000Gloves | 002fe3000000000000000000000000000000000000000A cool sword
-    // Page2Button5Line2=/auc WTS 002fe3000000000000000000000000000000000000000Gloves | 002fe3000000000000000000000000000000000000000A cool sword
-    // Page2Button5Line3=/auc WTS 002fe3000000000000000000000000000000000000000Gloves | 002fe3000000000000000000000000000000000000000A cool sword
-    // ...
-
-    // Goals:
-    // 1. For a given input list, create an output list - x
-    // 2. For an output list, modify it to have only the name and ID - x
-    // 3. For a name and ID, add purple link, ID hex and padding - x
-    // 4. For each purple link, add prefix and delimiter up to 255 characters separation - x
-    // 5. For each purple link list, add button prefix - x
-    // 7. Make sure each line is under 255 characters - x
-    // 8. Add a list of ignored items - x
-    // 9. Save data to local storage to remember previous price values - x
-    // 10. Fix bug: undefined items in list - x
-    // 6. Add a list of prices per items - x
-    // 11. Sort items (by name, or price) - x
-    // 12. Add loading from multiple files into input - x
-    // 13. Add saving the same files selected to storage
-    // 14. Add prices via another input
-    // 15. Make tabbing to next price field possible - rearrange prices
-    // 16. Add some styling, maybe use stone UI?
-    // 17. Bugfix - not all values put into the prices area are numerically alphabetical
-
     const delimiter = document.getElementById('delimiter');
     const inputList = document.getElementById('input-list');
     const pricesList = document.getElementById('prices-list');
