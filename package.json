@@ -6,8 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder -mw",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "tunnelquest-macros",
+    "mac": {
+      "category": "tendermario.tools"
+    }
   },
   "repository": {
     "type": "git",
@@ -32,6 +39,7 @@
     "@electron-forge/maker-zip": "^7.2.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
     "electron": "^28.1.4",
+    "electron-builder": "^24.9.1",
     "electron-reload": "^2.0.0-alpha.1"
   },
   "dependencies": {

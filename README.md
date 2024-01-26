@@ -40,10 +40,14 @@ Output text to be pasted in your macros file:
     Page2Button5Line2=/auc WTS 002fe3000000000000000000000000000000000000000Gloves
     ...
 
-
 ## Goals
 
-### V1 (Done)
+### 1.1.0
+
+1. Turn this into an electron app
+1. Add prices via another input field
+
+### 1.0.0
 
 1. For a given input list, create an output list
 1. For an output list, modify it to have only the name and ID
@@ -59,12 +63,16 @@ Output text to be pasted in your macros file:
 1. Add loading from multiple files into input
 1. Host at tendermario.github.io/eq-purple-links
 
-### V2
-
-1. Turn this into an electron app (Done)
-1. Add prices via another input field (Done)
+### Next
 1. Bugfix - not all values put into the prices area are numerically alphabetical
 1. Add saving the same files selected to storage
 1. Make tabbing to next price field possible - rearrange prices
 1. Add some styling, maybe use stone UI?
 1. Consider "2k" as "2000", consider "2.1k" as "2100"
+1. Add an icon for the app
+
+## Building versions
+
+Electron normally can only build for Windows from a Windows system. I had some issues trying to figure out how to acheive that, so I am using `electron-builder` as it promises to be able to build for Windows from a Mac computer.
+
+To build for mac and windows, run `npm run dist` which builds to `dist` a `.dmg` Mac installer file and a Windows `.exe` file, and to `dist/mac-arm64` a `.app` file.
