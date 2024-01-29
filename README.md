@@ -71,7 +71,29 @@ Output text to be pasted in your macros file:
 1. Consider "2k" as "2000", consider "2.1k" as "2100"
 1. Add an icon for the app
 
-## Building versions
+## Development
+
+### Prerequisites
+
+1. (WSL on Windows ONLY) install extra libraries:
+
+```
+sudo apt-get update && export DEBIAN_FRONTEND=noninteractive && sudo apt-get -y install --no-install-recommends xorg openbox libnss3 libasound2 libatk-adaptor libgtk-3-0
+# For running the development electron, we need these libraries to launch in a window
+sudo apt-get install -y curl unzip xvfb libxi6 libgconf-2-4
+```
+
+2. To clear error message "[6354:0128/152020.047105:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory" run:
+
+```
+sudo service dbus start
+```
+
+2. fork this repo
+3. Install dependencies `npm i`
+4. Run the electron server `npm start`
+
+### Building the distributable/executable for release
 
 Electron normally can only build for Windows from a Windows system. I had some issues trying to figure out how to acheive that, so I am using `electron-builder` as it promises to be able to build for Windows from a Mac computer.
 

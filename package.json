@@ -1,14 +1,17 @@
 {
-  "name": "tunnelquest-macros",
+	"name": "tunnelquest-macros",
   "version": "1.1.1",
   "description": "Pulls inventory from eq files and turns it into hotkey macros with purple links.",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
     "pack": "electron-builder --dir",
     "dist": "electron-builder -mw",
-    "postinstall": "electron-builder install-app-deps"
+    "win": "electron-builder -w"
   },
   "build": {
     "appId": "tunnelquest-macros",
