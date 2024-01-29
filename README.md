@@ -75,23 +75,11 @@ Output text to be pasted in your macros file:
 
 ### Prerequisites
 
-1. (WSL on Windows ONLY) install extra libraries:
+1. fork or clone this repo
+2. Install dependencies `npm i`
+3. Run the electron server `npm start`
 
-```
-sudo apt-get update && export DEBIAN_FRONTEND=noninteractive && sudo apt-get -y install --no-install-recommends xorg openbox libnss3 libasound2 libatk-adaptor libgtk-3-0
-# For running the development electron, we need these libraries to launch in a window
-sudo apt-get install -y curl unzip xvfb libxi6 libgconf-2-4
-```
-
-2. To clear error message "[6354:0128/152020.047105:ERROR:bus.cc(407)] Failed to connect to the bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory" run:
-
-```
-sudo service dbus start
-```
-
-2. fork this repo
-3. Install dependencies `npm i`
-4. Run the electron server `npm start`
+There's a bunch of steps I undertook to get electron to run in WSL on Windows. This is probably not necessary though.
 
 ### Building the distributable/executable for release
 
