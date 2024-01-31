@@ -14,16 +14,18 @@ This system currently requires pasting the output lines into your macros file na
 
 The location of these files are in `C:\Users\<your home directory>\AppData\Local\VirtualStore\Program Files (x86)\Sony\EverQuest` if you aren't running in Windows XP Compatibility mode, or in `C:\Program Files (x86)\Sony\EverQuest` if you are running `eqgame.exe` in Windows XP Compatibility mode ([which you should be](https://wiki.project1999.com/Tech_Support#Game_Crashing_When_Zoning_or_Camping) if you want to crashing less!)
 
-Exporting your inventory by default will be named something like `Tomnook-Inventory.txt` (or otherwise can be whatever name you type after `/exportfile inventory`)
+Exporting your inventory by default will be named something like `Tomnook-Inventory.txt` (or otherwise can be whatever name you type after `/exportfile inventory`).
+
+It's simplest to keep the whole inventory of a mule as sellable inventory, but you are able to deselect item types from the list.
 
 ## Instructions
 
-1. Run in EverQuest `/exportfile inventory` on each character you want to export the inventory on. It's simplest to keep the whole inventory of a mule as sellable inventory.
-2. Run Tunnelquest Macros.
-3. Select the inventory files.
-4. Select which items to skip (like backpacks)
-5. Enter prices.
-6. Copy the output list into your macros file.
+1. Run in EverQuest `/exportfile inventory` on each character you want to export the inventory on.
+1. Open Tunnelquest Macros.
+1. Select the inventory files.
+1. Select which items to skip (like backpacks)
+1. Enter prices.
+1. Copy the output list into your macros file.
 
 ## Reference Conversion
 
@@ -44,9 +46,9 @@ Output text to be pasted in your macros file:
     Page2Button5Line2=/auc WTS 002fe3000000000000000000000000000000000000000Gloves
     ...
 
-## Goals
+## Releases
 
-### 1.1.0
+### 1.1.1
 
 1. Turn this into an electron app
 1. Add prices via another input field
@@ -79,6 +81,8 @@ Output text to be pasted in your macros file:
 
 ### Prerequisites
 
+Node must be installed, Windows recommends using the `nvm` [installer](https://github.com/coreybutler/nvm-windows/releases) for PowerShell, but any way you grab Node I'm sure will suffice.
+
 1. fork or clone this repo
 2. Install dependencies `npm i`
 3. Run the electron server `npm start`
@@ -89,4 +93,4 @@ There's a bunch of steps I undertook to get electron to run in WSL on Windows. T
 
 Electron normally can only build for Windows from a Windows system. I had some issues trying to figure out how to acheive that, so I am using `electron-builder` as it promises to be able to build for Windows from a Mac computer.
 
-To build for mac and windows, run `npm run dist` which builds to `dist` a `.dmg` Mac installer file and a Windows `.exe` file, and to `dist/mac-arm64` a `.app` file.
+To build for mac, run `npm run dist` which builds to `dist` a `.dmg` Mac installer file and a Windows `.exe` file, and to `dist/mac-arm64` a `.app` file.

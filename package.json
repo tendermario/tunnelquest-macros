@@ -1,51 +1,50 @@
 {
 	"name": "tunnelquest-macros",
-  "version": "1.1.1",
-  "description": "Pulls inventory from eq files and turns it into hotkey macros with purple links.",
-  "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder -mw",
-    "win": "electron-builder -w"
-  },
-  "build": {
-    "appId": "tunnelquest-macros",
-    "mac": {
-      "category": "tendermario.tools"
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tendermario/tunnelquest-macros.git"
-  },
-  "keywords": [
-    "everquest",
-    "macros",
-    "electron"
-  ],
-  "author": "Mario Viens",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/tendermario/tunnelquest-macros/issues"
-  },
-  "homepage": "https://github.com/tendermario/tunnelquest-macros#readme",
-  "devDependencies": {
-    "@electron-forge/cli": "^7.2.0",
-    "@electron-forge/maker-deb": "^7.2.0",
-    "@electron-forge/maker-rpm": "^7.2.0",
-    "@electron-forge/maker-squirrel": "^7.2.0",
-    "@electron-forge/maker-zip": "^7.2.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
-    "electron": "^28.1.4",
-    "electron-builder": "^24.9.1",
-    "electron-reload": "^2.0.0-alpha.1"
-  },
-  "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
-  }
+	"version": "1.1.1",
+	"description": "Pulls inventory from eq files and turns it into hotkey macros with purple links.",
+	"main": "main.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "electron-forge start",
+		"package": "electron-forge package",
+		"make": "electron-forge make",
+		"publish": "electron-forge publish",
+		"pack": "electron-builder --dir",
+		"dist": "electron-builder -m"
+	},
+	"build": {
+		"appId": "tunnelquest-macros",
+		"mac": {
+			"category": "tendermario.tools"
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tendermario/tunnelquest-macros.git"
+	},
+	"keywords": [
+		"everquest",
+		"macros",
+		"electron"
+	],
+	"author": "Mario Viens",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/tendermario/tunnelquest-macros/issues"
+	},
+	"homepage": "https://github.com/tendermario/tunnelquest-macros#readme",
+	"devDependencies": {
+		"@electron-forge/cli": "^7.2.0",
+		"@electron-forge/maker-deb": "^7.2.0",
+		"@electron-forge/maker-rpm": "^7.2.0",
+		"@electron-forge/maker-squirrel": "^7.2.0",
+		"@electron-forge/maker-zip": "^7.2.0",
+		"@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
+		"electron": "^28.1.4",
+		"electron-builder": "^24.9.1",
+		"electron-reload": "^2.0.0-alpha.1"
+	},
+	"dependencies": {
+		"electron-squirrel-startup": "^1.0.0"
+	}
 }
