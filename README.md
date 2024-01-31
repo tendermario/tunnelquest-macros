@@ -91,6 +91,8 @@ There's a bunch of steps I undertook to get electron to run in WSL on Windows. T
 
 ### Building the distributable/executable for release
 
-Electron normally can only build for Windows from a Windows system. I had some issues trying to figure out how to acheive that, so I am using `electron-builder` as it promises to be able to build for Windows from a Mac computer.
+Electron builders usually only build on a corresponding architecture (i.e. Windows x64 arch from a Windows system, Mac arm from a Mac).
 
-To build for mac, run `npm run dist` which builds to `dist` a `.dmg` Mac installer file and a Windows `.exe` file, and to `dist/mac-arm64` a `.app` file.
+To build for Windows run `npm run make`. You now should have an `.exe` distribution in the `out\make\squirrel.windows\x64` folder and an unpacked version in `out\<name>-win32-x64`.
+
+To build for Mac, run `npm run dist` which builds to `dist` a `.dmg` Mac installer file.
