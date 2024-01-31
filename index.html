@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EverQuest Purple Links Creator</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Temporary styles-->
+  <style>
+    body {
+      background-color: white;
+      font-size: 14px;
+    }
+
+    h1 {
+      margin-left: 20px;
+    }
+  </style> 
 </head>
 <body>
   <div>
@@ -23,6 +34,8 @@
     <input id="buttonNumberStart" value="5" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></input>
     <label for="output-list">Output list:</label>
     <textarea id="output-list" class="w-full py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+    <label for="default-ignores">Ignore default bags:</label>
+    <input id="default-ignores" type="checkbox"></input>
   </div>
   <div>
     <div>
@@ -43,6 +56,11 @@
     const ignores = $('#ignores');
     const prices = $('#prices');
     const selectedFiles = document.getElementById("input-files");
+    const defaultIgnoresCheckbox = document.getElementById("default-ignores");
+
+    const defaults = {
+      defaultIgnores: true,
+    }
     
     // Storage actions
 
@@ -67,8 +85,18 @@
       updateLocalStore(list)
     }
 
+    const defaultIgnores = [
+      "17502", // Elemental Grimoire
+      "17005", // Backpack
+      "17969", // Hand Made Backpack
+      "17007", // Large Box
+      "17901", // Small Box
+      "17006" // Medicine Bag
+    ]
+
     const getIgnores = () => {
-      return JSON.parse(localStorage.getItem("ignoreList")) || []
+      const dbIgnores = JSON.parse(localStorage.getItem("ignoreList")) || []
+      return [ ...dbIgnores, ...defaultIgnores]
     }
 
     const toggleIgnoreId = id => {
@@ -182,6 +210,7 @@
     const generateOutput = items => {
       // Generate amount of items that will fit on each line
       let finalLines = createFinalLines(items)
+      console.log(finalLines)
 
       // Failure path:
       finalLines.forEach(value => {
@@ -217,6 +246,8 @@
     }
 
     const updateList = () => {
+      // TODO: Bugfix - not all values put into the prices area are numerically alphabetical
+      // It seems like the prices in one characters inventory doesn't mesh with anothers
       const inputListText = inputList.value
       let items = parseInput(inputListText) // creates [{name:x, id:1, hex:x, price:1}]
       updateLocalStore(items)
@@ -305,18 +336,43 @@
       }
 
       updateLocalStore(oldPrices)
-      updateList()
+    }
+
+    const toggleDefaultIgnores = () => {
+      const value = localStorage.getItem("defaultIgnores") || defaults.defaultIgnores
+      localStorage.setItem("defaultIgnores", !value)
+      setDefaultIgnoresCheckbox(!value)
+    }
+
+    const setDefaultIgnoresCheckbox = value => {
+      if (value) {
+        defaultIgnoresCheckbox.removeAttribute("checked")
+      } else {
+        defaultIgnoresCheckbox.setAttribute("checked", "")
+      }
+    }
+
+    const onLoad = () => {
+      setDefaultIgnoresCheckbox(localStorage.getItem("defaultIgnores") || defaults.defaultIgnores)
+      handleFiles()
     }
 
     inputList.addEventListener('input', updateList);
     prefix.addEventListener('input', updateList);
     delimiter.addEventListener('input', updateList);
     selectedFiles.addEventListener('change', handleFiles);
-    selectedFiles.addEventListener('change', saveFiles);
-    pricesList.addEventListener('input', updatePrices)
+    // selectedFiles.addEventListener('change', saveFiles);
+    pricesList.addEventListener('input', () => {
+      updatePrices()
+      updateList()
+    })
+    defaultIgnoresCheckbox.addEventListener('change', () => {
+      toggleDefaultIgnores()
+      updateList()
+    })
     // Run if the page loads as well
-    loadFiles();
-    handleFiles();
+    // loadFiles();
+    onLoad()
   </script>
 </body>
 </html>

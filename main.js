@@ -8,8 +8,8 @@ try {
 
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1400,
+    height: 1000,
     // This chunk is just to show what you can run outside of the html file. Change this!
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')

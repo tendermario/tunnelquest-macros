@@ -70,6 +70,8 @@ Output text to be pasted in your macros file:
 1. Host at tendermario.github.io/eq-purple-links
 
 ### Next
+
+1. Add default ignores checkbox to remove things like bags from the list by default
 1. Bugfix - not all values put into the prices area are numerically alphabetical
 1. Add saving the same files selected to storage
 1. Make tabbing to next price field possible - rearrange prices
