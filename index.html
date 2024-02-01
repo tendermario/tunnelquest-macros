@@ -8,7 +8,7 @@
   <!-- Temporary styles-->
   <style>
     body {
-      background-color: white;
+      background-color: grey;
       font-size: 14px;
     }
 
@@ -59,17 +59,30 @@
     const defaultIgnoresCheckbox = document.getElementById("default-ignores");
 
     const defaults = {
-      defaultIgnores: true,
+      ignoreIsDefault: true,
+      ignores: [
+        "17502", // Elemental Grimoire
+        "17005", // Backpack
+        "17969", // Hand Made Backpack
+        "17007", // Large Box
+        "17901", // Small Box
+        "17006" // Medicine Bag
+      ],
     }
+
+    // Local storage keys
+    const DEFAULT_IGNORES = "defaultIgnores"
+    const IGNORE_LIST = "ignoreList"
+    const ITEM_LIST = "itemList"
     
     // Storage actions
 
     const updateLocalStore = list => {
-      localStorage.setItem('itemList', JSON.stringify(Array.from(list)))
+      localStorage.setItem(ITEM_LIST, JSON.stringify(Array.from(list)))
     }
 
     const getItemList = () => {
-      return JSON.parse(localStorage.getItem('itemList'))
+      return JSON.parse(localStorage.getItem(ITEM_LIST))
     }
 
     const getItemById = id => getItemList()?.filter(item => item.id == id)[0]
@@ -85,18 +98,9 @@
       updateLocalStore(list)
     }
 
-    const defaultIgnores = [
-      "17502", // Elemental Grimoire
-      "17005", // Backpack
-      "17969", // Hand Made Backpack
-      "17007", // Large Box
-      "17901", // Small Box
-      "17006" // Medicine Bag
-    ]
-
     const getIgnores = () => {
-      const dbIgnores = JSON.parse(localStorage.getItem("ignoreList")) || []
-      return [ ...dbIgnores, ...defaultIgnores]
+      const dbIgnores = JSON.parse(localStorage.getItem(IGNORE_LIST)) || []
+      return [ ...dbIgnores, ...defaults.ignores]
     }
 
     const toggleIgnoreId = id => {
@@ -106,7 +110,7 @@
           } else {
             ignoreList.push(id);
           }
-          localStorage.setItem("ignoreList", JSON.stringify(ignoreList))
+          localStorage.setItem(IGNORE_LIST, JSON.stringify(ignoreList))
     }
 
     function unique(a) {
@@ -241,7 +245,7 @@
     }
 
     const removeIgnores = items => {
-      const ignoreList = JSON.parse(localStorage.getItem("ignoreList")) || []
+      const ignoreList = JSON.parse(localStorage.getItem(IGNORE_LIST)) || []
       return items.filter(value => !ignoreList.includes(value.id));
     }
 
@@ -339,21 +343,30 @@
     }
 
     const toggleDefaultIgnores = () => {
-      const value = localStorage.getItem("defaultIgnores") || defaults.defaultIgnores
-      localStorage.setItem("defaultIgnores", !value)
+      let value
+      if (localStorage.getItem(DEFAULT_IGNORES) === null) {
+        value = defaults.ignoreIsDefault
+      } else {
+        value = localStorage.getItem(DEFAULT_IGNORES) === 'true'
+      }
+      localStorage.setItem(DEFAULT_IGNORES, !value)
       setDefaultIgnoresCheckbox(!value)
     }
 
     const setDefaultIgnoresCheckbox = value => {
       if (value) {
-        defaultIgnoresCheckbox.removeAttribute("checked")
-      } else {
         defaultIgnoresCheckbox.setAttribute("checked", "")
+      } else {
+        defaultIgnoresCheckbox.removeAttribute("checked")
       }
     }
 
     const onLoad = () => {
-      setDefaultIgnoresCheckbox(localStorage.getItem("defaultIgnores") || defaults.defaultIgnores)
+      if (localStorage.getItem(DEFAULT_IGNORES) === null) {
+        setDefaultIgnoresCheckbox(defaults.ignoreIsDefault)
+      } else {
+        setDefaultIgnoresCheckbox(localStorage.getItem(DEFAULT_IGNORES) === 'true')
+      }
       handleFiles()
     }
 
