@@ -113,6 +113,8 @@
           localStorage.setItem(IGNORE_LIST, JSON.stringify(ignoreList))
     }
 
+    // Methods
+
     function unique(a) {
         var seen = {};
         return a.filter(function(item) {
@@ -212,13 +214,15 @@
     }
 
     const generateOutput = items => {
+      if (items.length == 0) {
+        console.warn("Warning: items is empty")
+      }
       // Generate amount of items that will fit on each line
       let finalLines = createFinalLines(items)
-      console.log(finalLines)
 
       // Failure path:
       finalLines.forEach(value => {
-        if (value.length > 255) {
+        if (value?.length > 255) {
           console.warn("Warning: length of the following line is above 255 chars (" + value.length + "):")
           console.warn(value)
         }
@@ -250,8 +254,6 @@
     }
 
     const updateList = () => {
-      // TODO: Bugfix - not all values put into the prices area are numerically alphabetical
-      // It seems like the prices in one characters inventory doesn't mesh with anothers
       const inputListText = inputList.value
       let items = parseInput(inputListText) // creates [{name:x, id:1, hex:x, price:1}]
       updateLocalStore(items)
@@ -271,7 +273,7 @@
           const reader = new FileReader();
           reader.readAsText(file, "UTF-8");
           reader.onload = function (event) {
-              inputList.innerHTML += event.target.result;
+              inputList.value += event.target.result;
               updateList()
           }
           reader.onerror = function (e) {
