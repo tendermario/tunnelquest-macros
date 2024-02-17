@@ -72,15 +72,16 @@ Output text to be pasted in your macros file:
 ### Next (will prepend with patch versions until new distribution of app)
 
 1. v1.1.2 - Add default ignores checkbox to remove things like bags from the list by default
-1. v1.1.2 - Bugfix - not all values put into the prices area are numerically alphabetical
+1. v1.1.2 - Prices bug: not all values put into the prices area are numerically alphabetical
 1. v1.1.2 - Input prices bug: after putting in input prices, the input list (from file) doesnt update
-1. Input prices bug: does not save input prices to storage, on reload reverts
-1. Add saving the same files selected to storage
+1. v1.1.2 - Input prices bug: does not save input prices to storage, on reload reverts
+1. v1.1.3 - Add saving the same files selected to storage
 1. Make tabbing to next price field possible - rearrange prices
 1. Add some styling, maybe use stone UI?
 1. Consider "2k" as "2000", consider "2.1k" as "2100"
 1. Add an icon for the app
 1. Add version of app to page in light grey using `app.getVersion()`
+1. If price is empty in input price list, don't update it
 
 ## Development
 

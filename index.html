@@ -74,6 +74,7 @@
     const DEFAULT_IGNORES = "defaultIgnores"
     const IGNORE_LIST = "ignoreList"
     const ITEM_LIST = "itemList"
+    const FILES_LIST = "inputFiles"
     
     // Storage actions
 
@@ -283,25 +284,31 @@
       }
     }
 
-    // TODO: saveFiles - This will attempt to save the same file names to local storage
-    // We need this + the user path to load the same files each time on load.
-    const saveFiles = () => {
-      // const {files} = selectedFiles
-      // console.log(files)
-      // const fileNames = []
-      // for (const file of files) {
-      //   fileNames.push(file.name)
-      // }
-      // localStorage.setItem("inputFiles", JSON.stringify(fileNames))
+    const handleSavedFiles = () => {
+      if (fileList.length > 0) {
+        for (file of fileList) {
+          const reader = new FileReader()
+          reader.read(new File(file))
+          reader.onload = function (event) {
+              inputList.value += event.target.result;
+              updateList()
+          }
+          reader.onerror = function (e) {
+              console.error(e)
+          }
+        }
+      }
     }
 
-    // TODO: loadFiles - This will attempt to load the saved files used from last time.
-    const loadFiles = () => {
-      // const inputFiles = JSON.parse(localStorage.getItem("inputFiles"))
-      // console.log(inputFiles)
-      // $.get(a, data => {
-      //   alert( `Load was performed. ${data}` )
-      // })
+    // saveFiles - This will attempt to save the same file names to local storage
+    // We need this + the user path to load the same files each time on load (Electron-app).
+    const saveFilesLocation = () => {
+      const {files} = selectedFiles
+      const fileNames = []
+      for (let file of files) {
+        fileNames.push(file.path)
+      }
+      localStorage.setItem(FILES_LIST, JSON.stringify(fileNames))
     }
 
     // Parse the prices from:
@@ -369,14 +376,15 @@
       } else {
         setDefaultIgnoresCheckbox(localStorage.getItem(DEFAULT_IGNORES) === 'true')
       }
-      handleFiles()
     }
+
+    // Events
 
     inputList.addEventListener('input', updateList);
     prefix.addEventListener('input', updateList);
     delimiter.addEventListener('input', updateList);
     selectedFiles.addEventListener('change', handleFiles);
-    // selectedFiles.addEventListener('change', saveFiles);
+    selectedFiles.addEventListener('change', saveFilesLocation);
     pricesList.addEventListener('input', () => {
       updatePrices()
       updateList()
@@ -385,8 +393,9 @@
       toggleDefaultIgnores()
       updateList()
     })
-    // Run if the page loads as well
-    // loadFiles();
+
+    // Actions
+
     onLoad()
   </script>
 </body>

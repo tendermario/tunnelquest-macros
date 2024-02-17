@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('node:path')
+const fs = require('fs')
 
 try {
   const electronReload = require('electron-reload')
@@ -10,7 +11,6 @@ const createWindow = () => {
   const win = new BrowserWindow({
     width: 1400,
     height: 1000,
-    // This chunk is just to show what you can run outside of the html file. Change this!
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
@@ -20,6 +20,9 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+  ipcMain.handle('readFile', async (event, filepath) => {
+    return fs.readFileSync(filepath, 'utf-8')
+  })
   createWindow()
 
   app.on('activate', () => {
