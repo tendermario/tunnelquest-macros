@@ -2,4 +2,4 @@
 // pass
 
 // On Windows, on open, the output list should populate
-// fail
+// pass

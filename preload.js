@@ -21,6 +21,7 @@ const loadFiles = () => {
 const addToInput = (selector, text) => {
   const element = document.getElementById(selector)
   if (element) element.value += text
+  document.getElementById(INPUT_LIST).dispatchEvent(new Event('input'))
 }
 
 window.addEventListener('DOMContentLoaded', () => {
