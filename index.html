@@ -259,13 +259,15 @@
       let items = parseInput(inputListText) // creates [{name:x, id:1, hex:x, price:1}]
       updateLocalStore(items)
       createIgnoresAndPricesLists(items)
-      items = removeIgnores(items).sort((item, prev) => Number(item.price) > Number(prev.price) ? -1 : 1)
+      items = removeIgnores(items).sort(sortPrice)
       
       const finalLines = generateOutput(items)
 
       // Separate with newlines and place in DOM
       outputList.value = finalLines.join("\n");
     }
+
+    const sortPrice = (item, prev) => Number(item.price || 0) > Number(prev.price || 0) ? -1 : 1
 
     const handleFiles = () => {
       const fileList = selectedFiles.files
