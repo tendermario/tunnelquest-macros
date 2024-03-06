@@ -126,6 +126,19 @@
           return false
         });
     }
+
+    const updateList = () => {
+      const inputListText = inputList.value
+      let items = parseInput(inputListText) // creates [{name:x, id:1, hex:x, price:1}]
+      updateLocalStore(items)
+      createIgnoresAndPricesLists(items)
+      items = removeIgnores(items).sort(sortPrice)
+      
+      const finalLines = generateOutput(items)
+
+      // Separate with newlines and place in DOM
+      outputList.value = finalLines?.join("\n") || ""
+    }
     
     function createIgnoresAndPricesLists(items) {
       // Add to both ignores and prices lists
@@ -217,6 +230,7 @@
     const generateOutput = items => {
       if (items.length == 0) {
         console.warn("Warning: items is empty")
+        return
       }
       // Generate amount of items that will fit on each line
       let finalLines = createFinalLines(items)
@@ -252,19 +266,6 @@
     const removeIgnores = items => {
       const ignoreList = JSON.parse(localStorage.getItem(IGNORE_LIST)) || []
       return items.filter(value => !ignoreList.includes(value.id));
-    }
-
-    const updateList = () => {
-      const inputListText = inputList.value
-      let items = parseInput(inputListText) // creates [{name:x, id:1, hex:x, price:1}]
-      updateLocalStore(items)
-      createIgnoresAndPricesLists(items)
-      items = removeIgnores(items).sort(sortPrice)
-      
-      const finalLines = generateOutput(items)
-
-      // Separate with newlines and place in DOM
-      outputList.value = finalLines.join("\n");
     }
 
     const sortPrice = (item, prev) => Number(item.price || 0) > Number(prev.price || 0) ? -1 : 1
@@ -378,6 +379,7 @@
       } else {
         setDefaultIgnoresCheckbox(localStorage.getItem(DEFAULT_IGNORES) === 'true')
       }
+      updateList()
     }
 
     // Events

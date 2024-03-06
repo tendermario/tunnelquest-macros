@@ -1,0 +1,5 @@
+// On Windows, on open, it should pull from inventory files last selected
+// pass
+
+// On Windows, on open, the output list should populate
+// fail
