@@ -48,6 +48,14 @@ Output text to be pasted in your macros file:
 
 ## Releases
 
+### 1.2.0
+
+1. Add default ignores checkbox to remove things like bags from the list by default
+1. Prices bugfix: not all values put into the prices area are numerically alphabetical
+1. Input prices bugfix: after putting in input prices, the input list (from file) doesnt update
+1. Input prices bugfix: does not save input prices to storage, on reload reverts
+1. Add saving the same windows file location selected to storage to retreive list automatically
+
 ### 1.1.1
 
 1. Turn this into an electron app
@@ -71,11 +79,6 @@ Output text to be pasted in your macros file:
 
 ### Next (will prepend with patch versions until new distribution of app)
 
-1. v1.1.2 - Add default ignores checkbox to remove things like bags from the list by default
-1. v1.1.2 - Prices bug: not all values put into the prices area are numerically alphabetical
-1. v1.1.2 - Input prices bug: after putting in input prices, the input list (from file) doesnt update
-1. v1.1.2 - Input prices bug: does not save input prices to storage, on reload reverts
-1. v1.1.3 - Add saving the same files selected to storage
 1. Make tabbing to next price field possible - rearrange prices
 1. Add some styling, maybe use stone UI?
 1. Consider "2k" as "2000", consider "2.1k" as "2100"
@@ -99,6 +102,6 @@ There's a bunch of steps I undertook to get electron to run in WSL on Windows. T
 
 Electron builders usually only build on a corresponding architecture (i.e. Windows x64 arch from a Windows system, Mac arm from a Mac).
 
-To build for Windows run `npm run make`. You now should have an `.exe` distribution in the `out\make\squirrel.windows\x64` folder and an unpacked version in `out\<name>-win32-x64`.
+To build for Windows run `npm run make-w`. You now should have an `.exe` distribution in the `out\make\squirrel.windows\x64` folder and an unpacked version in `out\<name>-win32-x64`.
 
-To build for Mac, run `npm run dist` which builds to `dist` a `.dmg` Mac installer file.
+To build for Mac, run `npm run make-m` which builds to `dist` a `.dmg` Mac installer file.

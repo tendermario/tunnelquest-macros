@@ -7,10 +7,10 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "electron-forge start",
 		"package": "electron-forge package",
-		"make": "electron-forge make && explorer .\\out\\make\\squirrel.windows\\x64",
+		"make-w": "electron-forge make && explorer .\\out\\make\\squirrel.windows\\x64",
 		"publish": "electron-forge publish",
 		"pack": "electron-builder --dir",
-		"dist": "electron-builder -m"
+		"make-m": "electron-builder -m"
 	},
 	"build": {
 		"appId": "tunnelquest-macros",
